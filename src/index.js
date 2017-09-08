@@ -37,8 +37,6 @@ app.use(function (req, res, next) {
   });
 });
 
-const port = process.env.PORT || 8080;
-
 const router = express.Router();  // eslint-disable-line
 
 router.use(function (req, res, next) {
@@ -188,5 +186,22 @@ router.route('/duels/:duel_id')
 
 app.use('/api', router);
 
-app.listen(port);
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+
+const port = process.env.PORT || 8080;
+
+const httpServer = http.createServer(app);
+httpServer.listen(port);
+/*
+const credentials = {
+  key: fs.readFileSync('ssl/key.pem', 'utf8'),
+  cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
+};
+
+const httpsServer = https.createServer(credentials, app);
+httpsServer.listen(443);
+*/
+
 console.log('Listening on port ' + port);
