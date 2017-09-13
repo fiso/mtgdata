@@ -61,7 +61,7 @@ function create (connection, name) {
 function middleware (options) {
   const connection = options.connection;
 
-  return async function verify (req, res, next) {
+  return async function middleware (req, res, next) {
     let paramResult = params.collectParams(req.headers, [
       {name: 'user-id', required: true, errorMessage:
         'Missing required header user-id'},
