@@ -75,7 +75,15 @@ function mount (connection, router) {
           res.status(422).json({errors:
             "You don't have access to modify this object"});
         } else {
-          res.json({message: 'Not implemented'});
+          connection.query('DELETE FROM decklists WHERE id=?',
+            req.params.decklist_id,
+            function (error, results, fields) {
+              if (error) {
+                res.status(500).send(error.code);
+              } else {
+                res.json({message: 'OK'});
+              }
+          });
         }
       } catch (e) {
         res.status(404).send();

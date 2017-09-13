@@ -83,8 +83,8 @@ function mount (connection, router) {
 
     .put(async (req, res) => {
       try {
-        const duel = await fetchDuel(connection, req.params.duel_id);
-        if (req.user.id !== duel.owner) {
+        const match = await fetchMatch(connection, req.params.match_id);
+        if (req.user.id !== match.owner) {
           res.status(422).json({errors:
             "You don't have access to modify this object"});
         } else {
@@ -97,12 +97,20 @@ function mount (connection, router) {
 
     .delete(async (req, res) => {
       try {
-        const duel = await fetchDuel(connection, req.params.duel_id);
-        if (req.user.id !== duel.owner) {
+        const match = await fetchMatch(connection, req.params.match_id);
+        if (req.user.id !== match.owner) {
           res.status(422).json({errors:
             "You don't have access to modify this object"});
         } else {
-          res.json({message: 'Not implemented'});
+          connection.query('DELETE FROM matches WHERE id=?',
+            req.params.match_id,
+            function (error, results, fields) {
+              if (error) {
+                res.status(500).send(error.code);
+              } else {
+                res.json({message: 'OK'});
+              }
+          });
         }
       } catch (e) {
         res.status(404).send();
