@@ -1,10 +1,12 @@
+const params = require('../params.js');
+
 const createTableStatement = `
 CREATE TABLE duels (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 archetype_a VARCHAR(255) NOT NULL,
 archetype_b VARCHAR(255) NOT NULL,
-last_released_set VARCHAR(255) NOT NULL,
 winner CHAR(1) NOT NULL,
+last_released_set VARCHAR(255),
 decklist_a INT,
 decklist_b INT,
 mulligans_a INT,
@@ -15,19 +17,17 @@ postboard BOOL,
 event_key VARCHAR(255),
 location_key VARCHAR(255),
 owner INT NOT NULL,
-timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE
-CURRENT_TIMESTAMP)`;
+timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)`;
 
 function fetchDuel (connection, id) {
   return new Promise((resolve, reject) => {
     connection.query('SELECT * FROM duels WHERE id = ?', [id],
       function (error, results, fields) {
         if (error) {
-          throw error;
+          reject(error);
+        } else {
+          resolve(results[0]);
         }
-
-        console.log(results[0]);
-        resolve(results[0]);
     });
   });
 }
@@ -39,10 +39,10 @@ function mount (connection, router) {
       connection.query('SELECT * FROM duels',
         function (error, results, fields) {
           if (error) {
-            throw error;
+            res.status(500).send(error.code);
+          } else {
+            res.json(results);
           }
-
-          res.json(results);
       });
     })
 
@@ -92,25 +92,49 @@ function mount (connection, router) {
       connection.query(query, valueArray,
         function (error, results, fields) {
           if (error) {
-            throw error;
+            res.status(500).send(error.code);
+          } else {
+            res.json({message: 'OK'});
           }
-
-          res.json({message: 'OK'});
       });
     })
   ;
 
   router.route('/duels/:duel_id')
     .get(async (req, res) => {
-      res.json(await fetchDuel(connection, req.params.duel_id));
+      try {
+        res.json(await fetchDuel(connection, req.params.duel_id));
+      } catch (e) {
+        res.status(404).send();
+      }
     })
 
-    .put((req, res) => {
-      res.json({message: 'Not implemented'});
+    .put(async (req, res) => {
+      try {
+        const duel = await fetchDuel(connection, req.params.duel_id);
+        if (req.user.id !== duel.owner) {
+          res.status(422).json({errors:
+            "You don't have access to modify this object"});
+        } else {
+          res.json({message: 'Not implemented'});
+        }
+      } catch (e) {
+        res.status(404).send();
+      }
     })
 
-    .delete((req, res) => {
-      res.json({message: 'Not implemented'});
+    .delete(async (req, res) => {
+      try {
+        const duel = await fetchDuel(connection, req.params.duel_id);
+        if (req.user.id !== duel.owner) {
+          res.status(422).json({errors:
+            "You don't have access to modify this object"});
+        } else {
+          res.json({message: 'Not implemented'});
+        }
+      } catch (e) {
+        res.status(404).send();
+      }
     })
   ;
 }

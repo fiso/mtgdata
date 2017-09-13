@@ -27,13 +27,14 @@ function verify (connection, name, token) {
         }
 
         const user = results[0];
-        if (!user.enabled) {
-          reject();
-        }
-        if (hash(token) === user.secret_hash) {
+        if (!user) {
+          reject(Error('invalid credentials'));
+        } else if (!user.enabled) {
+          reject(Error('user disabled'));
+        } else if (hash(token) === user.secret_hash) {
           resolve(user);
         } else {
-          reject();
+          reject(Error('invalid credentials'));
         }
     });
   });
@@ -50,7 +51,8 @@ function create (connection, name) {
           throw error;
         }
 
-        console.log(`Created user ${name} with secret ${token}`);
+        // console.log(`Created user ${name} with secret ${token}`);
+        results.mtgdata = {token};
         resolve(results);
     });
   });
@@ -59,7 +61,7 @@ function create (connection, name) {
 function expressVerify (options) {
   const connection = options.connection;
 
-  return function expressVerify (req, res, next) {
+  return async function expressVerify (req, res, next) {
     let paramResult = params.collectParams(req.headers, [
       {name: 'user-id', required: true, errorMessage:
         'Missing required header user-id'},
@@ -72,16 +74,15 @@ function expressVerify (options) {
       return;
     }
 
-    verify(connection, paramResult.params['user-id'],
-      paramResult.params['auth-token'])
-    .then((user) => {
+    try {
+      const user = await verify(connection, paramResult.params['user-id'],
+        paramResult.params['auth-token']);
       req.user = user;
       next();
-    })
-    .catch((e) => {
+    } catch (e) {
       console.log(e);
       res.status(403).json({error: 'Not authenticated'});
-    });
+    }
   };
 }
 
