@@ -6,6 +6,7 @@ id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 archetype_a VARCHAR(255) NOT NULL,
 archetype_b VARCHAR(255) NOT NULL,
 winner CHAR(1) NOT NULL,
+format VARCHAR(255) NOT NULL,
 last_released_set VARCHAR(255),
 decklist_a INT,
 decklist_b INT,
@@ -61,6 +62,7 @@ function mount (connection, router) {
 
           return '';
         }},
+        {name: 'format', required: true},
         {name: 'decklist_a'},
         {name: 'decklist_b'},
         {name: 'match_id'},
