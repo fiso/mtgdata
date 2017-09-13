@@ -11,12 +11,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "body-parser": "^1.17.2",
     "eslint": "^4.6.1",
     "eslint-config-google": "^0.9.1",
-    "eslint-plugin-async-await": "0.0.0",
+    "eslint-plugin-async-await": "0.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "mocha": "^3.5.3",
-    "mysql": "^2.14.1"
+    "mysql": "^2.14.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   }
 }
