@@ -1,10 +1,12 @@
 {
   "name": "mtgdata",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "This description is here to shut up NPM",
+  "repository": "https://github.com/fiso/mtgdata",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --recursive",
+    "tdd": "mocha --recursive --watch"
   },
   "author": "",
   "license": "ISC",
@@ -12,7 +14,9 @@
     "body-parser": "^1.17.2",
     "eslint": "^4.6.1",
     "eslint-config-google": "^0.9.1",
+    "eslint-plugin-async-await": "0.0.0",
     "express": "^4.15.4",
+    "mocha": "^3.5.3",
     "mysql": "^2.14.1"
   }
 }
