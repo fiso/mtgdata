@@ -18,7 +18,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(apiuser.expressVerify({connection}));
+app.use(apiuser.middleware({connection}));
 
 const router = express.Router();  // eslint-disable-line
 
