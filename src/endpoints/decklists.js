@@ -14,7 +14,11 @@ function fetchDecklist (connection, id) {
         if (error) {
           reject(error);
         } else {
-          resolve(results[0]);
+          if (results.length < 1) {
+            reject();
+          } else {
+            resolve(results[0]);
+          }
         }
     });
   });
