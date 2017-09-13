@@ -46,15 +46,17 @@ function randomElement (a) {
 }
 
 async function generateDuel (n) {
+  const a = randomElement(archetypes);
+  const b = randomElement(archetypes);
+  const w = randomElement([a, b]);
   const body = await post('duels', {
-    archetype_a: randomElement(archetypes),
-    archetype_b: randomElement(archetypes),
-    winner: randomElement(['a', 'b']),
+    archetype_a: a,
+    archetype_b: b,
+    winner: w,
     format: 'modern',
   });
 }
 
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 500; i++) {
   generateDuel();
-  console.log(i);
 }

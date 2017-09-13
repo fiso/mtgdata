@@ -6,6 +6,7 @@ const params = require('./params.js');
 const duels = require('./endpoints/duels.js');
 const matches = require('./endpoints/matches.js');
 const decklists = require('./endpoints/decklists.js');
+const matchups = require('./endpoints/matchups.js');
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -30,6 +31,7 @@ const router = express.Router();  // eslint-disable-line
 duels.mount(connection, router);
 matches.mount(connection, router);
 decklists.mount(connection, router);
+matchups.mount(connection, router);
 
 app.use('/api', router);
 

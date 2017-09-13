@@ -5,7 +5,7 @@ CREATE TABLE duels (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 archetype_a VARCHAR(255) NOT NULL,
 archetype_b VARCHAR(255) NOT NULL,
-winner CHAR(1) NOT NULL,
+winner VARCHAR(255) NOT NULL,
 format VARCHAR(255) NOT NULL,
 last_released_set VARCHAR(255),
 decklist_a INT,
@@ -55,13 +55,7 @@ function mount (connection, router) {
       let paramResult = params.collectParams(req.body, [
         {name: 'archetype_a', required: true},
         {name: 'archetype_b', required: true},
-        {name: 'winner', required: true, validator: (value) => {
-          if (['a', 'b'].indexOf(String(value)) === -1) {
-            return "Invalid winner. Must be 'a' or 'b'.";
-          }
-
-          return '';
-        }},
+        {name: 'winner', required: true},
         {name: 'format', required: true},
         {name: 'decklist_a'},
         {name: 'decklist_b'},
@@ -76,6 +70,12 @@ function mount (connection, router) {
         {name: 'event_key'},
         {name: 'location_key'},
       ]);
+
+      if (paramResult.params.winner &&
+          paramResult.params.winner !== paramResult.params.archetype_a &&
+          paramResult.params.winner !== paramResult.params.archetype_b) {
+          paramResult.errors.push('Winner must be one of the given archetypes');
+      }
 
       if (paramResult.errors.length > 0) {
         res.status(422).json({errors: paramResult.errors});
