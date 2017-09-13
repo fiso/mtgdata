@@ -16,16 +16,16 @@ const connection = mysql.createConnection({
 
 const app = express();
 
+app.use(function (req, res, next) {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(apiuser.middleware({connection}));
 
 const router = express.Router();  // eslint-disable-line
-
-router.use(function (req, res, next) {
-  console.log(`${req.method} ${req.originalUrl}`);
-  next();
-});
 
 duels.mount(connection, router);
 matches.mount(connection, router);
