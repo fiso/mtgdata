@@ -34,21 +34,11 @@ decklists.mount(connection, router);
 app.use('/api', router);
 
 const http = require('http');
-const https = require('https');
 const fs = require('fs');
 
 const port = process.env.PORT || 8080;
 
 const httpServer = http.createServer(app);
 httpServer.listen(port);
-/*
-const credentials = {
-  key: fs.readFileSync('ssl/key.pem', 'utf8'),
-  cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
-};
-
-const httpsServer = https.createServer(credentials, app);
-httpsServer.listen(443);
-*/
 
 console.log('Listening on port ' + port);
