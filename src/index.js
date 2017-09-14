@@ -7,6 +7,7 @@ const duels = require('./endpoints/duels.js');
 const matches = require('./endpoints/matches.js');
 const decklists = require('./endpoints/decklists.js');
 const matchups = require('./endpoints/matchups.js');
+const cors = require('cors');
 const root = require('./root.js');
 
 const connection = mysql.createConnection({
@@ -27,6 +28,7 @@ app.get('/', root.mount());
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(apiuser.middleware({connection}));
 
 const router = express.Router();  // eslint-disable-line
