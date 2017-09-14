@@ -1,3 +1,4 @@
+/ssl
 /secret.json
 **/*.log
 shrinkwrap.yaml

@@ -45,10 +45,8 @@ let server = null;
 if (process.argv.length > 2 && process.argv[2] === 'ssl') {
   const https = require('https');
   const options = {
-    key: fs.readFileSync('ssl/file.mysite.key'),
-    cert: fs.readFileSync('ssl/file.crt'),
-    ca: [fs.readFileSync('ssl/file.crt')],
-    passphrase: 'passphrase',
+    key: fs.readFileSync('ssl/privkey.pem'),
+    cert: fs.readFileSync('ssl/fullchain.pem'),
   };
   port = 443;
   server = https.createServer(options, app);
