@@ -62,6 +62,14 @@ function middleware (options) {
   const connection = options.connection;
 
   return async function middleware (req, res, next) {
+    const whitelist = [
+      '/api/matchups/',
+    ];
+    if (whitelist.find((entry) => req.originalUrl.indexOf(entry) === 0)) {
+      next();
+      return;
+    }
+
     let paramResult = params.collectParams(req.headers, [
       {name: 'user-id', required: true, errorMessage:
         'Missing required header user-id'},
