@@ -1,8 +1,12 @@
 function mount () {
   return function middleware (req, res, next) {
+    /* eslint-disable */
     res.send(`
       <html>
         <head>
+          <title>Vill du ligga?</title>
+          <link rel="icon" type="image/png"
+            href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=">
           <style>
             * {
               box-sizing: border-box;
@@ -32,6 +36,7 @@ function mount () {
       </html>
       `
     );
+    /* eslint-enable */
   };
 }
 
