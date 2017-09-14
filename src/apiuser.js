@@ -62,6 +62,11 @@ function middleware (options) {
   const connection = options.connection;
 
   return async function middleware (req, res, next) {
+    if (req.originalUrl.indexOf('/api') !== 0) {
+      next();
+      return;
+    }
+
     const whitelist = [
       '/api/matchups/',
     ];

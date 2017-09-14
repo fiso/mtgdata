@@ -7,6 +7,7 @@ const duels = require('./endpoints/duels.js');
 const matches = require('./endpoints/matches.js');
 const decklists = require('./endpoints/decklists.js');
 const matchups = require('./endpoints/matchups.js');
+const root = require('./root.js');
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -21,6 +22,8 @@ app.use(function (req, res, next) {
   console.log(`${req.method} ${req.originalUrl}`);
   next();
 });
+
+app.get('/', root.mount());
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
