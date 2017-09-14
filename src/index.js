@@ -38,9 +38,24 @@ app.use('/api', router);
 const http = require('http');
 const fs = require('fs');
 
-const port = process.env.PORT || 8080;
+let port = 8080;
 
-const httpServer = http.createServer(app);
-httpServer.listen(port);
+let server = null;
 
-console.log('Listening on port ' + port);
+if (process.argv.length > 2 && process.argv[2] === 'ssl') {
+  const https = require('https');
+  const options = {
+    key: fs.readFileSync('ssl/file.mysite.key'),
+    cert: fs.readFileSync('ssl/file.crt'),
+    ca: [fs.readFileSync('ssl/file.crt')],
+    passphrase: 'passphrase',
+  };
+  port = 443;
+  server = https.createServer(options, app);
+} else {
+  server = http.createServer(app);
+}
+
+server.listen(port, function () {
+  console.log('Listening on port ' + port);
+});
