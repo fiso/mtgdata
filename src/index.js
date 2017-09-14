@@ -19,7 +19,7 @@ const connection = mysql.createConnection({
 const app = express();
 
 app.use(function (req, res, next) {
-  console.log(`${req.method} ${req.originalUrl}`);
+  console.log(`${req.method} ${req.originalUrl} from ${req.ip}`);
   next();
 });
 
