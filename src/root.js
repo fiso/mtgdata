@@ -26,6 +26,7 @@ function mount () {
             h1 {
               color: white;
               font-size: 200px;
+              text-align: center;
             }
           </style>
         </head>
